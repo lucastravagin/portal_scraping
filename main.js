@@ -9,7 +9,7 @@ app.listen(port, () => {
 })
 
 
-app.get('/cnep', async function (req, res, next) {
+app.get('/', async function (req, res, next) {
     try {
         let cnpj = req.query.cnpj
         let cnpjFormatado = await adicionaMascara.adicionaMascara(cnpj)
