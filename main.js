@@ -30,7 +30,7 @@ app.get('/', async function (req, res, next) {
             cadastrado = false
         } else {
             cadastrado = cnep
-            cadastrado = false
+            cadastrado = true
         }
 
         let result = {data: [{ cadastrado: cadastrado , cnep: cnep}, { cadastrado: cadastrado,ceis: ceis }]}
