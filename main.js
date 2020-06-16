@@ -17,10 +17,23 @@ app.get('/', async function (req, res, next) {
         let cnep = await getCNEP(cnpjFormatado)
         let ceis = await getCEIS(cnpjFormatado)
 
-        cnep ? cnep : cnep = 'Este CNPJ não possui cadastro no CNEP (Cadastro Nacional de Empresas Punidas)'
-        ceis ? ceis : ceis = 'Este CNPJ não possui cadastro no CEIS (Cadastro de Empresas Inidôneas e Suspensas)'
+    
+        if(!cnep) {
+            cnep = false
+            cadastrado = false
+        } else {
+            cnep = cnep
+            cadastrado = true
+        }
+        if(!ceis) {
+            ceis = false
+            cadastrado = false
+        } else {
+            cadastrado = cnep
+            cadastrado = false
+        }
 
-        let result = {data: [{ cnep: cnep }, { ceis: ceis }]}
+        let result = {data: [{ cadastrado: cadastrado , cnep: cnep}, { cadastrado: cadastrado,ceis: ceis }]}
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
