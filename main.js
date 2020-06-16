@@ -33,8 +33,8 @@ app.get('/', async function (req, res, next) {
             cadastradoCeis = true
         }
 
-        let result = []
-        result.push({ cadastrado: cadastradoCnep , cnep: cnep}, { cadastrado: cadastradoCeis, ceis: ceis })
+        let result = {}
+        result = Object.assign({cnep: { cadastrado: cadastradoCnep , cnep: cnep}}, {ceis: { cadastrado: cadastradoCeis, ceis: ceis }})
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
