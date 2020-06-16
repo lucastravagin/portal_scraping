@@ -20,21 +20,21 @@ app.get('/', async function (req, res, next) {
     
         if(!cnep) {
             cnep = false
-            cadastrado = false
+            cadastradoCnep = false
         } else {
             cnep = cnep
-            cadastrado = true
+            cadastradoCnep = true
         }
         if(!ceis) {
             ceis = false
-            cadastrado = false
+            cadastradoCeis = false
         } else {
             cadastrado = cnep
-            cadastrado = true
+            cadastradoCeis = true
         }
 
         let result = []
-        result.push([cnep = { cadastrado: cadastrado , cnep: cnep}], [ceis = { cadastrado: cadastrado, ceis: ceis }])
+        result.push({ cadastrado: cadastradoCnep , cnep: cnep}, { cadastrado: cadastradoCeis, ceis: ceis })
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
