@@ -33,7 +33,7 @@ app.get('/', async function (req, res, next) {
             cadastrado = true
         }
 
-        let result = {data: [{ cadastrado: cadastrado , cnep: cnep}, { cadastrado: cadastrado,ceis: ceis }]}
+        let result = { cadastrado: cadastrado , cnep: cnep}, { cadastrado: cadastrado, ceis: ceis }
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
