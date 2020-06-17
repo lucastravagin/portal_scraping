@@ -46,7 +46,7 @@ app.get('/', async function (req, res, next) {
 
   
         if (contratos.length == 0) {
-            contratos = false
+            contratos = []
             cadastradoContratos = false
         } else {
             cadastrado = contratos
@@ -54,11 +54,14 @@ app.get('/', async function (req, res, next) {
         }
 
         let result = {}
+        let totalContratos = contratos.length
         result = Object.assign(
             { cnep: { cadastrado: cadastradoCnep, ...cnep } },
             { ceis: { cadastrado: cadastradoCeis, ...ceis } },
-            { contratos: { possui_contratos: cadastradoContratos ,...contratos }}
-             )
+            { possui_contratos: cadastradoContratos },
+            { totalContratos: totalContratos },
+            { detalheContratos: [ ...contratos ]}
+        )
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
