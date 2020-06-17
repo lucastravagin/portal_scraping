@@ -46,6 +46,14 @@ const ceisSchema = new mongoose.Schema({
 )
 
 
+const naturezaJuridicaSchema = new mongoose.Schema({
+    denominacao: String,
+    codigo: String,
+    descricao: String,
+    ano: Number
+}, { collection: 'natureza_juridica' }
+)
+
 const contratoSchema = new mongoose.Schema({
     orgao_superior_contratante: String,
     nome: String,
@@ -60,4 +68,7 @@ const contratoSchema = new mongoose.Schema({
 }, { collection: 'contratos' }
 )
 
-module.exports = { Mongoose: mongoose, CnepSchema: cnepSchema, CeisSchema: ceisSchema , ContratoSchema: contratoSchema }
+module.exports = { Mongoose: mongoose, 
+    CnepSchema: cnepSchema, CeisSchema: ceisSchema ,
+    NaturezaJuridicaSchema: naturezaJuridicaSchema, 
+    ContratoSchema: contratoSchema }

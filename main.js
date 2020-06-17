@@ -1,6 +1,7 @@
 const app = require('express')()
 const db = require('./config/db')
 const adicionaMascara = require('./config/util')
+
 const port = 3000
 
 
@@ -8,6 +9,16 @@ app.listen(port, () => {
     console.log(`app listen on port ${port}`)
 })
 
+
+
+app.get('/naturezaJuridica', async (req, res, next) => {
+    try {
+        let listNaturezaJuridica = await getNatureza_Juridica() 
+        res.status(200).send(listNaturezaJuridica)
+    } catch (error) {
+        res.status(404).send(error)
+    }
+})
 
 app.get('/', async function (req, res, next) {
     try {
@@ -17,15 +28,15 @@ app.get('/', async function (req, res, next) {
         let cnep = await getCNEP(cnpjFormatado)
         let ceis = await getCEIS(cnpjFormatado)
 
-    
-        if(!cnep) {
+
+        if (!cnep) {
             cnep = false
             cadastradoCnep = false
         } else {
             cnep = cnep
             cadastradoCnep = true
         }
-        if(!ceis) {
+        if (!ceis) {
             ceis = false
             cadastradoCeis = false
         } else {
@@ -34,7 +45,7 @@ app.get('/', async function (req, res, next) {
         }
 
         let result = {}
-        result = Object.assign({cnep: { cadastrado: cadastradoCnep , ...cnep}}, {ceis: { cadastrado: cadastradoCeis, ...ceis }})
+        result = Object.assign({ cnep: { cadastrado: cadastradoCnep, ...cnep } }, { ceis: { cadastrado: cadastradoCeis, ...ceis } })
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
@@ -60,6 +71,20 @@ const getCEIS = (cnpj) => {
     return new Promise((resolve, reject) => {
         let Ceis = db.Mongoose.model('ceis', db.CeisSchema)
         Ceis.findOne({ cpfCnpj: cnpj }).lean().exec((e, docs) => {
+            if (e) return reject(err)
+            try {
+                resolve(docs)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    })
+}
+
+const getNatureza_Juridica = () => {
+    return new Promise((resolve, reject) => {
+        let NaturezaJuridica = db.Mongoose.model('natureza_juridica', db.NaturezaJuridicaSchema)
+        NaturezaJuridica.find({}).lean().exec((e, docs) => {
             if (e) return reject(err)
             try {
                 resolve(docs)
