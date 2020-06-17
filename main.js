@@ -13,7 +13,7 @@ app.listen(port, () => {
 
 app.get('/naturezaJuridica', async (req, res, next) => {
     try {
-        let listNaturezaJuridica = await getNatureza_Juridica() 
+        let listNaturezaJuridica = await getNatureza_Juridica()
         res.status(200).send(listNaturezaJuridica)
     } catch (error) {
         res.status(404).send(error)
@@ -27,7 +27,7 @@ app.get('/', async function (req, res, next) {
 
         let cnep = await getCNEP(cnpjFormatado)
         let ceis = await getCEIS(cnpjFormatado)
-
+        let contratos = await getContratos(cnpjFormatado)
 
         if (!cnep) {
             cnep = false
@@ -44,8 +44,21 @@ app.get('/', async function (req, res, next) {
             cadastradoCeis = true
         }
 
+  
+        if (contratos.length == 0) {
+            contratos = false
+            cadastradoContratos = false
+        } else {
+            cadastrado = contratos
+            cadastradoContratos = true
+        }
+
         let result = {}
-        result = Object.assign({ cnep: { cadastrado: cadastradoCnep, ...cnep } }, { ceis: { cadastrado: cadastradoCeis, ...ceis } })
+        result = Object.assign(
+            { cnep: { cadastrado: cadastradoCnep, ...cnep } },
+            { ceis: { cadastrado: cadastradoCeis, ...ceis } },
+            { contratos: { possui_contratos: cadastradoContratos ,...contratos }}
+             )
         res.status(200).send(result)
     } catch (error) {
         res.status(404).send(error)
@@ -95,24 +108,21 @@ const getNatureza_Juridica = () => {
     })
 }
 
+const getContratos = (cnpj) => {
+    return new Promise((resolve, reject) => {
+        let Contratos = db.Mongoose.model('contratos', db.ContratoSchema)
+        Contratos.find({ cpfCnpjFornecedor: cnpj }).lean().exec((e, docs) => {
+            if (e) return reject(err)
+            try {
+                resolve(docs)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    })
+}
 
 
-// const getReceita = (cnpj) => {
-//     let optionsCNPJ = {
-//         'method': 'GET',
-//         'url': `https://receita-federal-api-hml.gclaims.com.br/?cnpj=${cnpj}`
-//     }
-//     return new Promise((resolve, reject) => {
-//         request(optionsCNPJ, (error, response) => {
-//             if (error) return reject(err);
-//             try {
-//                 resolve(response.body)
-//             } catch (error) {
-//                 reject(error)
-//             }
-//         })
-//     })
-// }
 
 
 
