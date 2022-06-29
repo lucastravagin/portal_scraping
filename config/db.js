@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.connect(`mongodb://gclaims:gclaims%402020@onpointcluster-shard-00-00-5nmlj.azure.mongodb.net:27017,onpointcluster-shard-00-01-5nmlj.azure.mongodb.net:27017,onpointcluster-shard-00-02-5nmlj.azure.mongodb.net:27017/cnep?ssl=true&replicaSet=OnPointCluster-shard-0&authSource=admin&retryWrites=true&w=majority`,
-    { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+    { useNewUrlParser: true, useUnifiedTopology: true })
     
 
 
